@@ -17,23 +17,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         //setContentView(R.layout.activity_main)
+        val post = Post("body content", "title content", 5)
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("http://jsonplaceholder.typicode.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val apiInterface:ApiInterface=retrofit.create(ApiInterface::class.java)
+        val apiInterface: ApiInterface = retrofit.create(ApiInterface::class.java)
 
 
-        val call: Call<Post> =apiInterface.getPost("1")
+        val call: Call<Post> = apiInterface.storedPost(post)
         call.enqueue(object : Callback<Post> {
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.v("retrofit", "call failed")
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+              binding.title.text= response.body()!!.title
             }
 
-            override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                binding.title.text= response.body()!!.title
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                binding.title.text=t.message
+
             }
 
         })
+
     }
 }
