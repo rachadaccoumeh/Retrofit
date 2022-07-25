@@ -24,16 +24,15 @@ class MainActivity : AppCompatActivity() {
         val apiInterface:ApiInterface=retrofit.create(ApiInterface::class.java)
 
 
-        val call: Call<Post> =apiInterface.post
-        call.enqueue(object : Callback<Post> {
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.v("retrofit", "call failed")
+        val call: Call<List<Post>> =apiInterface.getPost("1")
+        call.enqueue(object : Callback<List<Post>>{
+            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
+                binding.title.text= response.body()!![0].title
             }
 
-            override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                binding.title.text= response.body()!!.title
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+                binding.title.text= t.message
             }
-
         })
     }
 }
