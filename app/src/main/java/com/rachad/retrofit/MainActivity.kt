@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val apiInterface:ApiInterface=retrofit.create(ApiInterface::class.java)
 
 
-        val call: Call<Post> =apiInterface.post
+        val call: Call<Post> =apiInterface.getPost("1")
         call.enqueue(object : Callback<Post> {
             override fun onFailure(call: Call<Post>, t: Throwable) {
                 Log.v("retrofit", "call failed")
